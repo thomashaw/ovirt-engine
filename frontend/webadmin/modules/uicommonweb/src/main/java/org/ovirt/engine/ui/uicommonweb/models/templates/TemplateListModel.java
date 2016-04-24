@@ -480,7 +480,7 @@ public class TemplateListModel extends VmBaseListModel<Void, VmTemplate> impleme
         return "wa_template_dialog"; //$NON-NLS-1$
     }
 
-    private UnitVmModel createModel(VmModelBehaviorBase behavior) {
+    protected UnitVmModel createModel(VmModelBehaviorBase behavior) {
         if (behavior.isBlankTemplateBehavior()) {
             return new BlankTemplateModel(behavior, this);
         }
@@ -627,7 +627,7 @@ public class TemplateListModel extends VmBaseListModel<Void, VmTemplate> impleme
         commands.add(UICommand.createDefaultOkUiCommand("OnSaveVm", this)); //$NON-NLS-1$
         commands.add(UICommand.createCancelUiCommand("Cancel", this)); //$NON-NLS-1$
 
-        setupNewVmModel(new UnitVmModel(new NewVmFromTemplateModelBehavior(template), this),
+        setupNewVmModel(createModel(new NewVmFromTemplateModelBehavior(template)),
                 template.getVmType(), getSystemTreeSelectedItem(), commands);
     }
 

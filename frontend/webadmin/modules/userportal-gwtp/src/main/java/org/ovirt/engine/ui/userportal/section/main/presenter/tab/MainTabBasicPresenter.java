@@ -10,6 +10,7 @@ import org.ovirt.engine.ui.userportal.section.main.presenter.AbstractModelActiva
 import org.ovirt.engine.ui.userportal.section.main.presenter.MainTabPanelPresenter;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicDetailsPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicListPresenterWidget;
+import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicTemplatePresenterWidget;
 import org.ovirt.engine.ui.userportal.uicommon.model.UserPortalModelInitEvent;
 import org.ovirt.engine.ui.userportal.uicommon.model.UserPortalModelInitEvent.UserPortalModelInitHandler;
 import org.ovirt.engine.ui.userportal.uicommon.model.basic.UserPortalBasicListProvider;
@@ -51,22 +52,28 @@ public class MainTabBasicPresenter extends AbstractModelActivationPresenter<User
     }
 
     @ContentSlot
+    public static final Type<RevealContentHandler<?>> TYPE_TemplatePanelContent = new Type<RevealContentHandler<?>>();
+
+    @ContentSlot
     public static final Type<RevealContentHandler<?>> TYPE_VmListContent = new Type<RevealContentHandler<?>>();
 
     @ContentSlot
     public static final Type<RevealContentHandler<?>> TYPE_VmDetailsContent = new Type<RevealContentHandler<?>>();
 
     private final MainTabBasicListPresenterWidget vmList;
+    private final MainTabBasicTemplatePresenterWidget templateList;
     private final MainTabBasicDetailsPresenterWidget vmDetails;
 
     @Inject
     public MainTabBasicPresenter(EventBus eventBus, ViewDef view, ProxyDef proxy,
             MainTabBasicListPresenterWidget vmList,
+            MainTabBasicTemplatePresenterWidget templateList,
             MainTabBasicDetailsPresenterWidget vmDetails,
             final UserPortalBasicListProvider provider,
             final ConnectAutomaticallyManager connectAutomaticallyManager) {
         super(eventBus, view, proxy, provider, MainTabPanelPresenter.TYPE_SetTabContent);
         this.vmList = vmList;
+        this.templateList = templateList;
         this.vmDetails = vmDetails;
 
         connectAutomaticallyManager.registerModel(provider.getModel());
@@ -83,6 +90,7 @@ public class MainTabBasicPresenter extends AbstractModelActivationPresenter<User
         super.onReveal();
 
         setInSlot(TYPE_VmListContent, vmList);
+        setInSlot(TYPE_TemplatePanelContent, templateList);
         setInSlot(TYPE_VmDetailsContent, vmDetails);
     }
 

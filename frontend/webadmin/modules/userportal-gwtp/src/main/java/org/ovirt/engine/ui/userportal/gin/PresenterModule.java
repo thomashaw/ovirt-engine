@@ -13,6 +13,7 @@ import org.ovirt.engine.ui.userportal.section.main.presenter.popup.permissions.P
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.template.TemplateEditPopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.template.TemplateInterfacePopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.CloneVmPopupPresenterWidget;
+import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.NewVmFromTemplatePopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.SingleSelectionVmDiskAttachPopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.VmChangeCDPopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.VmClonePopupPresenterWidget;
@@ -33,6 +34,7 @@ import org.ovirt.engine.ui.userportal.section.main.presenter.tab.MainTabExtended
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicDetailsPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicListItemPresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicListPresenterWidget;
+import org.ovirt.engine.ui.userportal.section.main.presenter.tab.basic.MainTabBasicTemplatePresenterWidget;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.extended.SideTabExtendedResourcePresenter;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.extended.SideTabExtendedTemplatePresenter;
 import org.ovirt.engine.ui.userportal.section.main.presenter.tab.extended.SideTabExtendedVirtualMachinePresenter;
@@ -63,6 +65,7 @@ import org.ovirt.engine.ui.userportal.section.main.view.popup.permissions.Permis
 import org.ovirt.engine.ui.userportal.section.main.view.popup.template.TemplateEditPopupView;
 import org.ovirt.engine.ui.userportal.section.main.view.popup.template.TemplateInterfacePopupView;
 import org.ovirt.engine.ui.userportal.section.main.view.popup.vm.CloneVmPopupView;
+import org.ovirt.engine.ui.userportal.section.main.view.popup.vm.NewVmFromTemplatePopupView;
 import org.ovirt.engine.ui.userportal.section.main.view.popup.vm.SingleSelectionVmDiskAttachPopupView;
 import org.ovirt.engine.ui.userportal.section.main.view.popup.vm.VmChangeCDPopupView;
 import org.ovirt.engine.ui.userportal.section.main.view.popup.vm.VmClonePopupView;
@@ -83,6 +86,7 @@ import org.ovirt.engine.ui.userportal.section.main.view.tab.MainTabExtendedView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.basic.MainTabBasicDetailsView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.basic.MainTabBasicListItemView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.basic.MainTabBasicListView;
+import org.ovirt.engine.ui.userportal.section.main.view.tab.basic.MainTabBasicTemplateView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.extended.SideTabExtendedResourceView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.extended.SideTabExtendedTemplateView;
 import org.ovirt.engine.ui.userportal.section.main.view.tab.extended.SideTabExtendedVirtualMachineView;
@@ -254,6 +258,9 @@ public class PresenterModule extends BasePresenterModule {
         bindSingletonPresenterWidget(MainTabBasicListPresenterWidget.class,
                 MainTabBasicListPresenterWidget.ViewDef.class,
                 MainTabBasicListView.class);
+        bindSingletonPresenterWidget(MainTabBasicTemplatePresenterWidget.class,
+                MainTabBasicTemplatePresenterWidget.ViewDef.class,
+                MainTabBasicTemplateView.class);
         bindPresenterWidget(MainTabBasicListItemPresenterWidget.class,
                 MainTabBasicListItemPresenterWidget.ViewDef.class,
                 MainTabBasicListItemView.class);
@@ -325,6 +332,9 @@ public class PresenterModule extends BasePresenterModule {
                 TemplateInterfacePopupPresenterWidget.ViewDef.class,
                 TemplateInterfacePopupView.class);
 
+        bindPresenterWidget(NewVmFromTemplatePopupPresenterWidget.class,
+                NewVmFromTemplatePopupPresenterWidget.ViewDef.class,
+                NewVmFromTemplatePopupView.class);
     }
 
 }

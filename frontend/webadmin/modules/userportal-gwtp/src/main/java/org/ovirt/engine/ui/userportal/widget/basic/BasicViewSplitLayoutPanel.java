@@ -1,11 +1,12 @@
 package org.ovirt.engine.ui.userportal.widget.basic;
 
+import java.util.ArrayList;
+
 import org.ovirt.engine.ui.userportal.widget.UserPortalSplitLayoutPanel;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,19 +41,29 @@ public class BasicViewSplitLayoutPanel extends UserPortalSplitLayoutPanel {
         int width = Window.getClientWidth();
         // as it is not possible to set the width in ui.xml in percentage
         // it has to be set here
-        super.addWest(widget, width * 0.6);
+        super.addWest(widget, width * 0.2);
     }
 
     public void initWidget() {
-        Element dragger = findElementByClassName(this.getElement(), "gwt-SplitLayoutPanel-HDragger"); //$NON-NLS-1$
-        if (dragger != null) {
-            dragger.setInnerHTML(
-                    template.dragger(
-                            topBackgroundImage,
-                            middleBackgroundImage,
-                            SPLILLER_WIDTH_PX).asString()
-                    );
+        ArrayList<Widget> widgets = findWidgetsByClassName("gwt-SplitLayoutPanel-HDragger"); //$NON-NLS-1$
+
+        String splitterTemplate =
+                template.dragger(topBackgroundImage, middleBackgroundImage, SPLILLER_WIDTH_PX).asString();
+
+        Widget infoPaneDragger = widgets.get(1);
+        infoPaneDragger.getElement().setInnerHTML(splitterTemplate);
+    }
+
+    protected ArrayList<Widget> findWidgetsByClassName(String name) {
+        ArrayList<Widget> widgets = new ArrayList<>();
+        int widgetCount = getWidgetCount();
+
+        for (int i = 0; i < widgetCount; i++) {
+            Widget widget = getWidget(i);
+            if (widget.getStyleName().equals(name))
+                widgets.add(widget);
         }
+        return widgets;
     }
 
 }

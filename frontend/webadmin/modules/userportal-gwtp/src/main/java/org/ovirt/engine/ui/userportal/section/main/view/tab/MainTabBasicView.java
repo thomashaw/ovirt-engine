@@ -30,6 +30,9 @@ public class MainTabBasicView extends AbstractView implements MainTabBasicPresen
     Panel vmListPanel;
 
     @UiField
+    Panel templateListPanel;
+
+    @UiField
     Panel vmDetailPanel;
 
     @UiField(provided = true)
@@ -64,6 +67,8 @@ public class MainTabBasicView extends AbstractView implements MainTabBasicPresen
     public void setInSlot(Object slot, IsWidget content) {
         if (slot == MainTabBasicPresenter.TYPE_VmListContent) {
             setPanelContent(vmListPanel, content);
+        } else if (slot == MainTabBasicPresenter.TYPE_TemplatePanelContent) {
+            setPanelContent(templateListPanel, content);
         } else if (slot == MainTabBasicPresenter.TYPE_VmDetailsContent) {
             setPanelContent(vmDetailPanel, content);
         } else {

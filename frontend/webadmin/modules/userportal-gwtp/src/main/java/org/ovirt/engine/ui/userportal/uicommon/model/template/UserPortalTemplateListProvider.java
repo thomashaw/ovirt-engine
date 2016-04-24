@@ -10,6 +10,7 @@ import org.ovirt.engine.ui.uicommonweb.models.ConfirmationModel;
 import org.ovirt.engine.ui.uicommonweb.models.Model;
 import org.ovirt.engine.ui.uicommonweb.models.userportal.UserPortalTemplateListModel;
 import org.ovirt.engine.ui.userportal.section.main.presenter.popup.template.TemplateEditPopupPresenterWidget;
+import org.ovirt.engine.ui.userportal.section.main.presenter.popup.vm.NewVmFromTemplatePopupPresenterWidget;
 import org.ovirt.engine.ui.userportal.uicommon.model.UserPortalDataBoundModelProvider;
 import org.ovirt.engine.ui.userportal.uicommon.model.UserPortalSearchableTableModelProvider;
 import com.google.gwt.event.shared.EventBus;
@@ -20,6 +21,7 @@ public class UserPortalTemplateListProvider
     extends UserPortalDataBoundModelProvider<VmTemplate, UserPortalTemplateListModel>
     implements UserPortalSearchableTableModelProvider<VmTemplate, UserPortalTemplateListModel> {
 
+    private final Provider<NewVmFromTemplatePopupPresenterWidget> newVmFromTemplatePopupProvider;
     private final Provider<TemplateEditPopupPresenterWidget> editTemplatePopupProvider;
     private final Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider;
 
@@ -27,9 +29,11 @@ public class UserPortalTemplateListProvider
     public UserPortalTemplateListProvider(EventBus eventBus,
             Provider<DefaultConfirmationPopupPresenterWidget> defaultConfirmPopupProvider,
             CurrentUser user,
+            Provider<NewVmFromTemplatePopupPresenterWidget> newVmFromTemplatePopupProvider,
             Provider<TemplateEditPopupPresenterWidget> editTemplatePopupProvider,
             Provider<RemoveConfirmationPopupPresenterWidget> removeConfirmPopupProvider) {
         super(eventBus, defaultConfirmPopupProvider, user);
+        this.newVmFromTemplatePopupProvider = newVmFromTemplatePopupProvider;
         this.editTemplatePopupProvider = editTemplatePopupProvider;
         this.removeConfirmPopupProvider = removeConfirmPopupProvider;
     }
@@ -39,6 +43,8 @@ public class UserPortalTemplateListProvider
             UICommand lastExecutedCommand, Model windowModel) {
         if (lastExecutedCommand == getModel().getEditCommand()) {
             return editTemplatePopupProvider.get();
+        } else if (lastExecutedCommand == getModel().getCreateVmFromTemplateCommand() ) {
+            return newVmFromTemplatePopupProvider.get();
         } else {
             return super.getModelPopup(source, lastExecutedCommand, windowModel);
         }

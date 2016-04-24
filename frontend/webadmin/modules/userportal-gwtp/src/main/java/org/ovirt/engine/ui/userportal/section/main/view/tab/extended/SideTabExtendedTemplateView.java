@@ -65,7 +65,7 @@ public class SideTabExtendedTemplateView extends AbstractSideTabWithDetailsView<
 
     private static final TemplateTableResources templateTableResources = GWT.create(TemplateTableResources.class);
 
-    private static final TemplateTableHeaderResources TEMPLATE_TABLE_HEADER_RESOURCES =
+    public static final TemplateTableHeaderResources TEMPLATE_TABLE_HEADER_RESOURCES =
             GWT.create(TemplateTableHeaderResources.class);
 
     private static final TemplateSideTabWithDetailsViewStyle TEMPLATE_SIDE_TAB_WITH_DETAILS_VIEW_STYLE =
@@ -184,6 +184,13 @@ public class SideTabExtendedTemplateView extends AbstractSideTabWithDetailsView<
             @Override
             protected UICommand resolveCommand() {
                 return getModel().getRemoveCommand();
+            }
+        });
+
+        getTable().addActionButton(new UserPortalButtonDefinition<VmTemplate>(constants.createVmFromTemplate()) {
+            @Override
+            protected UICommand resolveCommand() {
+                return getModel().getCreateVmFromTemplateCommand();
             }
         });
     }

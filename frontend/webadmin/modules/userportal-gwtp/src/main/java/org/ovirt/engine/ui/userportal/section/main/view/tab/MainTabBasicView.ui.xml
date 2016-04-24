@@ -64,13 +64,15 @@
 
         <g:center>
             <w:BasicViewSplitLayoutPanel addStyleNames="{style.splitLayoutPanelStyle}" ui:field="splitLayoutPanel" >
-                <w:west size="500" >
-                    <g:LayoutPanel ui:field="vmListPanel" />
+                <w:west size="0" >
+                    <g:LayoutPanel ui:field="templateListPanel"/>
                 </w:west>
-
                 <w:center>
-                    <g:LayoutPanel addStyleNames="{style.vmDetailPanelStyle}" ui:field="vmDetailPanel" />
+                    <g:LayoutPanel ui:field="vmListPanel" />
                 </w:center>
+                <w:east size="500" >
+                    <g:LayoutPanel addStyleNames="{style.vmDetailPanelStyle}" ui:field="vmDetailPanel" />
+                </w:east>
             </w:BasicViewSplitLayoutPanel>
         </g:center>
     </g:DockLayoutPanel>

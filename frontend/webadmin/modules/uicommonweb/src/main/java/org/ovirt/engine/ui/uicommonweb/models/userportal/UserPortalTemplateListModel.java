@@ -9,11 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.ovirt.engine.core.common.VdcActionUtils;
+import org.ovirt.engine.core.common.action.AddVmParameters;
 import org.ovirt.engine.core.common.action.VdcActionType;
 import org.ovirt.engine.core.common.businessentities.VmTemplate;
 import org.ovirt.engine.core.common.businessentities.VmTemplateStatus;
 import org.ovirt.engine.core.compat.Guid;
 import org.ovirt.engine.ui.frontend.AsyncQuery;
+import org.ovirt.engine.ui.frontend.Frontend;
 import org.ovirt.engine.ui.frontend.INewAsyncCallback;
 import org.ovirt.engine.ui.uicommonweb.dataprovider.AsyncDataProvider;
 import org.ovirt.engine.ui.uicommonweb.models.configure.UserPortalPermissionListModel;
@@ -26,7 +28,9 @@ import org.ovirt.engine.ui.uicommonweb.models.templates.UserPortalTemplateDiskLi
 import org.ovirt.engine.ui.uicommonweb.models.templates.UserPortalTemplateEventListModel;
 import org.ovirt.engine.ui.uicommonweb.models.vms.IconCache;
 import org.ovirt.engine.ui.uicommonweb.models.vms.TemplateVmModelBehavior;
+import org.ovirt.engine.ui.uicommonweb.models.vms.UnitVmModel;
 import org.ovirt.engine.ui.uicommonweb.models.vms.UserPortalTemplateVmModelBehavior;
+import org.ovirt.engine.ui.uicommonweb.models.vms.VmModelBehaviorBase;
 import org.ovirt.engine.ui.uicommonweb.place.UserPortalApplicationPlaces;
 import com.google.inject.Inject;
 
@@ -92,15 +96,33 @@ public class UserPortalTemplateListModel extends TemplateListModel {
                             VdcActionType.RemoveVmTemplate) &&
                             !isBlankTemplateSelected()
                     );
+            getCreateVmFromTemplateCommand().
+                    setIsExecutionAllowed(item.getStatus() != VmTemplateStatus.Locked && !isBlankTemplateSelected());
         } else {
             getEditCommand().setIsExecutionAllowed(false);
             getRemoveCommand().setIsExecutionAllowed(false);
+            getCreateVmFromTemplateCommand().setIsExecutionAllowed(false);
         }
     }
 
     @Override
     protected String getEditTemplateAdvancedModelKey() {
         return "up_template_dialog"; //$NON-NLS-1$
+    }
+
+    @Override protected UnitVmModel createModel(VmModelBehaviorBase behavior) {
+        UnitVmModel model = super.createModel(behavior);
+        generateDefaultName(model);
+        return model;
+    }
+
+    protected void generateDefaultName(UnitVmModel model) {
+        String spacer = "-"; //$NON-NLS-1$
+        String username = Frontend.getInstance().getLoggedInUser().getLoginName();
+        String templateName = getSelectedItem().getName();
+        String index = getNextIndexNumber();
+        // check if unique here + add index number if not
+        model.getName().setEntity(username + spacer + templateName + spacer + index);
     }
 
     @Override
@@ -114,6 +136,11 @@ public class UserPortalTemplateListModel extends TemplateListModel {
         super.setItems(sortedValues);
     }
 
+    @Override
+    protected void setPortalSpecificParameters(AddVmParameters parameters){
+        parameters.setMakeCreatorExplicitOwner(true);
+    }
+
     /**
      * It sorts {@link org.ovirt.engine.core.common.businessentities.VmTemplate}s using
      * {@link org.ovirt.engine.ui.uicommonweb.models.userportal.UserPortalTemplateListModel.TemplateComparator}
@@ -125,6 +152,16 @@ public class UserPortalTemplateListModel extends TemplateListModel {
         final List<VmTemplate> sortedValues = new ArrayList<>(value);
         Collections.sort(sortedValues, new TemplateComparator());
         return sortedValues;
+    }
+
+    public String getNextIndexNumber() {
+        Guid selectedBaseId = getSelectedItem().getBaseTemplateId();
+        Collection<VmTemplate> templates = getItems();
+        Integer index = 0;
+        for (VmTemplate template: templates) {
+            if (selectedBaseId.equals(template.getBaseTemplateId())) index++;
+        }
+        return index.toString();
     }
 
     /**

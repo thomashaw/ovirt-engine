@@ -1,6 +1,7 @@
 package org.ovirt.engine.ui.uicommonweb.models.templates;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.ovirt.engine.core.common.action.AddVmParameters;
@@ -340,7 +341,8 @@ public abstract class VmBaseListModel<E, T> extends ListWithDetailsAndReportsMod
 
         getcurrentVm().setVmInit(model.getVmInitModel().buildCloudInitParameters(model));
 
-        if (!model.getProviders().getItems().iterator().next().equals(model.getProviders().getSelectedItem())) {
+        Collection providers = model.getProviders().getItems();
+        if (providers != null && !providers.iterator().next().equals(model.getProviders().getSelectedItem())) {
             getcurrentVm().setProviderId(model.getProviders().getSelectedItem().getId());
         }
         if (model.getIsNew()) {
@@ -371,6 +373,7 @@ public abstract class VmBaseListModel<E, T> extends ListWithDetailsAndReportsMod
         parameters.setSoundDeviceEnabled(model.getIsSoundcardEnabled().getEntity());
         parameters.setVirtioScsiEnabled(model.getIsVirtioScsiEnabled().getEntity());
         parameters.setVmLargeIcon(IconUtils.filterPredefinedIcons(model.getIcon().getEntity().getIcon()));
+        setPortalSpecificParameters(parameters);
         setVmWatchdogToParams(model, parameters);
         setRngDeviceToParams(model, parameters);
         BuilderExecutor.build(model, parameters, new UnitToGraphicsDeviceParamsBuilder());
@@ -383,6 +386,10 @@ public abstract class VmBaseListModel<E, T> extends ListWithDetailsAndReportsMod
                 parameters,
                 createUnitVmModelNetworkAsyncCallback(vm, model),
                 this);
+    }
+
+    protected void setPortalSpecificParameters(AddVmParameters parameters) {
+        // no-op by default.
     }
 
     protected void updateVM(UnitVmModel model){
